@@ -19,8 +19,16 @@ class TestMockio(unittest.TestCase):
         _file = open("/etc/nginx/sites-enabled/bar.conf")
         _file.write("test")
         _file.close()
-        self.assertIn("test", _file.buflist)
+        self.assertIn("test", _file.contents)
 
+    @mockio(files)
+    def test_write_read(self):
+        _file = open("/etc/nginx/sites-enabled/bar.conf")
+        _file.write("test")
+        _file.close()
+
+        self.assertEqual(open("/etc/nginx/sites-enabled/bar.conf").read(),
+                         "test")
 
 if __name__ == "__main__":
     unittest.main()
